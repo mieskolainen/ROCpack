@@ -51,7 +51,7 @@
 % Bayes optimal criteria is, e.g., maximum a Bayes odds
 % decision.
 %
-% mikael.mieskolainen@cern.ch, 27/0/2018
+% mikael.mieskolainen@cern.ch, 27/07/2018
 clear; close all;
 
 %mode = 1; % Single point cut on the x-axis
