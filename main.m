@@ -492,7 +492,7 @@ end
 if (variation == 2)
     l = legend([hs{1}, hs{2}], ...
         {sprintf('$\\epsilon_2^%s$ (background rate = false positive $[\\alpha]$), 1-AUC = %0.2f', in, auc(1)), ...
-         sprintf('$\\pi_1^%s$ (signal purity), AUC = %0.2f', in, auc(2))});
+         sprintf('$\\pi_1^%s$ (signal purity), AUC$_{P}$ = %0.2f', in, auc(2))});
     set(l,'AutoUpdate','off'); % Do not add more entries
     set(l,'interpreter','latex','fontsize',8);
 end
