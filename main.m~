@@ -206,8 +206,9 @@ for i = 1:length(cval)
     pxC1 = l1*f1; % p(x,C1) = p(x|C1) p(C1)
     pxC2 = l2*f2; % p(x,C2) = p(x|C2) p(C2)
     
-    intP1 = sum( pxC1(ind_out) );  % out integral (miss of signal)
-    intP2 = sum( pxC2(ind_in) ) ;  % in  integral (leakage of background)
+    delta = xval(2)-xval(1);                % Riemann sum step
+    intP1 = sum( pxC1(ind_out) ) * delta ;  % out integral (miss of signal)
+    intP2 = sum( pxC2(ind_in) )  * delta;   % in  integral (leakage of background)
     
     bayeserror(i) = intP1 + intP2;
 end
@@ -229,30 +230,22 @@ end
 
 f = figure;
 
-plot(cval, bayeserror, 'k-'); hold on;
+plot(cval, bayeserror, 'k-');
 
-[minval,mind] = min(bayeserror);
-plot(ones(2,1)*cval(mind), [0 1], 'k:');
-plot([cval(1) cval(end)], ones(2,1)*minval, 'k:');
-
-ylabel('Bayes error (overall misclassification rate)','interpreter','latex');
+ylabel('Bayes error (probability of misclassification)','interpreter','latex');
 xlabel('$c_x$ (cut on $x$)','interpreter','latex');
-axis([min(cval) max(cval) 0 1]);
-
 if (mode == 2)
     xlabel('$c_{\ell R}$ (cut on likelihood ratio)','interpreter','latex');
     set(gca,'xscale','log');
-    %set(gca,'yscale','log');
-    axis([0 max(cval) 0 1.0]);
 end
 if (mode == 3)
     xlabel('$c_{B R}$ (cut on Bayes posterior)','interpreter','latex');
     %set(gca,'xscale','log');
-    axis([0 1 0 1.0]);
-    set(gca, 'Xtick', 0:0.1:1.0);
+    axis([1e-1 max(cval) min(bayeserror)*0.5 0.5*max(bayeserror)]);
+    set(gca, 'Xtick', round(linspace(0.,1,12), 1));
 end
 axis square;
-title('$\int_{\Omega_2} P(x|C_1)p(C_1)dx + \int_{\Omega_1} P(x|C_2)p(C_2)dx$', ...
+title('$\int_{\Omega_2} P(C_1|x)p(x)dx + \int_{\Omega_1} P(C_2|x)p(x)dx$', ...
     'interpreter','latex');
 
 filename = sprintf('bayeserror_mode_%d', mode);
